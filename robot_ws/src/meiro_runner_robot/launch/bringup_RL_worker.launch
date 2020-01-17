@@ -1,0 +1,9 @@
+<launch>
+  <param name="MODEL_S3_BUCKET" value="$(env MODEL_S3_BUCKET)" />
+  <param name="MODEL_S3_PREFIX" value="$(env MODEL_S3_PREFIX)" />
+  <param name="ROS_AWS_REGION" value="$(env ROS_AWS_REGION)" />
+  <param name="MODEL_FILE" value="$(env MODEL_FILE)" />
+
+  <!-- Start the RL worker -->
+  <node name="agent" pkg="meiro_runner_robot" type="run_turtlebot_controller.sh" output="screen"/>
+</launch>

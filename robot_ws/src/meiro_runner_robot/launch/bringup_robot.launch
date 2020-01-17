@@ -1,0 +1,7 @@
+<launch>
+  <!-- Bringup TurtleBot3 -->
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_robot.launch"/>
+
+  <!-- Start the RL worker -->
+  <include file="$(find meiro_runner_robot)/launch/bringup_RL_worker.launch"/>
+</launch>
