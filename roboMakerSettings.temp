@@ -2,7 +2,7 @@
   "runConfigurations": [
     {
       "id": "MeiroRunner_Cfg01",
-      "name": "MeiroRunner",
+      "name": "MeiroRunner simulation",
       "type": "colcon build",
       "cfg": {
         "workingDir": "./<project_dir>/simulation_ws",
@@ -11,7 +11,7 @@
     },
     {
       "id": "MeiroRunner_Cfg02",
-      "name": "MeiroRunner",
+      "name": "MeiroRunner simulation",
       "type": "colcon bundle",
       "cfg": {
         "workingDir": "./<project_dir>/simulation_ws",
@@ -164,26 +164,13 @@
     },
     {
       "id": "fc7f3c40-0440-afb2-897a-dc41ee389c3a",
-      "name": "build -> bundle -> launch training",
+      "name": "Meiro Runner build -> bundle all",
       "type": "workflow",
       "runCfgIds": [
         "MeiroRunner_Cfg01",
         "MeiroRunner_Cfg02",
         "MeiroRunner_Cfg03",
-        "MeiroRunner_Cfg04",
-        "MeiroRunner_SimulationJob2"
-      ]
-    },
-    {
-      "id": "3f48acd3-e084-e869-937b-d570b9dc81e2",
-      "name": "build -> bundle -> launch evaluate",
-      "type": "workflow",
-      "runCfgIds": [
-        "MeiroRunner_Cfg01",
-        "MeiroRunner_Cfg02",
-        "MeiroRunner_Cfg03",
-        "MeiroRunner_Cfg04",
-        "MeiroRunner_SimulationJob1"
+        "MeiroRunner_Cfg04"
       ]
     }
   ]

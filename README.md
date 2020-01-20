@@ -8,7 +8,7 @@ The following figure (a screenshot from Gazebo) shows you a simulation environme
 
 An RL algorithm will help navigate the agent to reach to the GOAL without bumping into a wall. The agent has a 360-degree surround lidar scanner (360 points x 5 fps) so that it monitors the distance from the surrounding walls all around. The lidar data are used to describe a state at a given step within an episode. The agent makes a decision out of 5 different actions i.e. turn left, turn right, move straight, steer to the left, and steer to the right. (To learn more about the reinforcement learning framework used for this application, Coach, please take a look at the following [link](https://github.com/NervanaSystems/coach))  
 
-## Preparation 
+## Preparation
 
 This sample application is expected to be executed from [AWS RoboMaker](https://aws.amazon.com/robomaker/).
 
@@ -24,14 +24,16 @@ cd MeiroRunner
 The setup script will create AWS resources to run the application and the created resources are noted in ws_settings.yaml file.
 The setup script will then build the application, the whole process will take around 20 minitue to complete.
 
-## How to use
+## How to use on AWS RoboMaker
 To train machine larning model with reinforcement learning using robomaker simulator,  select *Run* -> *Launch Simulation* -> *MeiroRunner Training* from the menu of RoboMaker development environment.
 
 To evaluate the machine learning model, select *Run* -> *Launch Simulation* -> *MeiroRunner Evaluate*.
 
+To modify and rebuild the application, modify the code on AWS RoboMaker development environment and slect *Run* -> *Workflow* -> *Meiro Runner build -> bundle all*. This will update the buid files for the application.
+
 To run the macnine learning model in the real-life using a physical robot (i.e. Turtlebot3 Burger), you can use a launch file bringup_robot.launch in meiro_runner_robot package.
 The robot application is under robot_ws direcotry, to build and deploy the application to physical robots, please refer to [RoboMaker documentation](https://docs.aws.amazon.com/robomaker/latest/dg/gs-deploy.html).
-Following the configuration for robot application running in Turtlebot3 Burger.
+Following is the configuration for robot application running in Turtlebot3 Burger.
 
 - Package name: meiro_runner_robot
 - Launch file: bringup_robot.launch
