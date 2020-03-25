@@ -26,7 +26,7 @@ import os
 import yaml
 import re
 
-SETTING_FILE="./ws_settings.yaml"
+SETTING_FILE="./ws_settings.yml"
 SETTINGS = ["aws_region", 
             "ros_version",
             "gazebo_version",
@@ -37,11 +37,12 @@ SETTINGS = ["aws_region",
             "vpc", 
             "security_groups", 
             "subnets", 
-            "iam_policy", 
             "iam_role", 
             "robomaker_settings"]
 
 APPNAME_BASE="meiro_runner_"
+
+CFStackName = "" # Specify stack name through command parameter
 
 class Setup:
     def __init__(self):
@@ -161,182 +162,50 @@ class Setup:
         return result
 
     def setup_bucket_name(self):
-        done = False
-        retry = 5
+        result = None
         try:
-            id = boto3.client('sts').get_caller_identity()
-            accountId = id["Account"]
+            cf = boto3.client('cloudformation')
+            stacks = cf.describe_stacks(StackName=CFStackName)
+            
+            for stack in stacks["Stacks"]:
+                outputs = stack["Outputs"]
+                for output in outputs:
+                    print(output["OutputKey"] + ":" + output["OutputValue"])
+                    if output["OutputKey"] == "BucketName":
+                        result = output["OutputValue"]
+
         except Exception as e:
             errlog("Exception : %s" % str(e))
             return None
-            
-        while(not done):
-            tm = gmtime()
-            result = "robomaker-ws-%s-%s-%s" % (self.settings["aws_region"], accountId,strftime("%y%m%d-%H%M%S", tm))  
-            
-            log("Create S3 bucket: %s.." % result)
-            #create bucket 
-            try: 
-                region_name = self.settings["aws_region"]
-                s3_client = boto3.client('s3', region_name=region_name)
-                if region_name == "us-east-1":
-                    s3_client.create_bucket(Bucket=result)
-                else:
-                    location = {'LocationConstraint': self.settings["aws_region"]}
-                    s3_client.create_bucket(Bucket=result, CreateBucketConfiguration=location)
-            except Exception as e:
-                retry -= 1
-                if retry >= 0:
-                    log(" => Failed.. retrying")
-                    sleep(random.randint(1,3))
-                    continue
-                else:
-                    errlog("Failed to create S3 bucket!")
-                    errlog("Error Message: %s" % str(e))
-                    return None
-            done = True
-            
+
+        if result == None:
+            errlog("BucketName couldn't be found in the CloudFormation stack")
+            return None
+
         return result
         
-    def setup_iam_policy(self):
-        log("create iam policy..")
-        iam = boto3.client('iam')
-
-        try:
-            id = boto3.client('sts').get_caller_identity()
-            accountId = id["Account"]
-        except Exception as e:
-            errlog("Exception : %s" % str(e))
-            return None
-
-        tm = gmtime()
-        policy_name = "robomaker-ws-policy-%s" % (strftime("%y%m%d-%H%M%S", tm)) 
-        log("policy name : %s" % policy_name)
-
-        my_policy = {
-                "Version": "2012-10-17",
-                "Statement": [
-                {
-                    "Action": "s3:ListBucket",
-                    "Resource": [
-                        "arn:aws:s3:::{}".format(self.settings["bucket_name"])
-                    ],
-                    "Effect": "Allow"
-                },
-                {
-                    "Action": [
-                        "s3:Get*",
-                        "s3:List*"
-                    ],
-                    "Resource": [
-                        "arn:aws:s3:::{}/*".format(self.settings["bucket_name"])
-                    ],
-                    "Effect": "Allow"
-                },
-                {
-                    "Action": "s3:Put*",
-                    "Resource": [
-                        "arn:aws:s3:::{}/*".format(self.settings["bucket_name"])
-                    ],
-                    "Effect": "Allow"
-                },
-                {
-                    "Action": "s3:DeleteObject",
-                    "Resource": [
-                        "arn:aws:s3:::{}/*".format(self.settings["bucket_name"])
-                    ],
-                    "Effect": "Allow"
-                },
-                {
-                    "Action": [
-                        "logs:CreateLogGroup",
-                        "logs:CreateLogStream",
-                        "logs:PutLogEvents",
-                        "logs:DescribeLogStreams"
-                    ],
-                    "Resource": [
-                        "arn:aws:logs:*:{}:log-group:/aws/robomaker/SimulationJobs*".format(accountId)
-                    ],
-                    "Effect": "Allow"
-                },
-                {
-                    "Action": [
-                        "cloudwatch:PutMetricData",
-                    ],
-                    "Effect": "Allow",
-                    "Resource": "*"
-                },
-                {
-                    "Action": [
-                        "robomaker:TagResource",
-                        "robomaker:UntagResource",
-                        "robomaker:ListTagsForResource",
-                        "robomaker:CancelSimulationJob"
-                    ],
-                    "Resource": [
-                        "arn:aws:robomaker:*:{}:simulation-job*".format(accountId)
-                    ],
-                    "Effect": "Allow"
-                }
-            ]
-        }
-        
-        try:
-            response = iam.create_policy(
-              PolicyName=policy_name,
-              PolicyDocument=json.dumps(my_policy)
-            )
-            result = response["Policy"]["Arn"]
-        except Exception as e:
-            errlog("Exception : %s" % str(e))
-            return None
-            
-        return result
-
     def setup_iam_role(self):
-        log("create iam role..")
-        iam = boto3.client('iam')
-        path='/'
-        tm = gmtime()
-        role_name = "Cloud9-robomaker-ws-role-%s" % (strftime("%y%m%d-%H%M%S", tm)) 
-        log("role name : %s" % role_name)
-        description='Role for RoboMaker workshop'
-
-        trust_policy={
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Sid": "",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "robomaker.amazonaws.com"
-              },
-              "Action": "sts:AssumeRole"
-            }
-          ]
-        }
-        
+        result = None
         try:
-            response = iam.create_role(
-                Path=path,
-                RoleName=role_name,
-                AssumeRolePolicyDocument=json.dumps(trust_policy),
-                Description=description,
-                MaxSessionDuration=3600,
-            )
-
-            result = response["Role"]["Arn"]
-
-            iam.attach_role_policy(
-                RoleName= role_name,
-                PolicyArn= self.settings["iam_policy"]
-            )
+            cf = boto3.client('cloudformation')
+            stacks = cf.describe_stacks(StackName=CFStackName)
+            
+            for stack in stacks["Stacks"]:
+                outputs = stack["Outputs"]
+                for output in outputs:
+                    print(output["OutputKey"] + ":" + output["OutputValue"])
+                    if output["OutputKey"] == "IAMRole":
+                        result = output["OutputValue"]
 
         except Exception as e:
             errlog("Exception : %s" % str(e))
             return None
-            
-        return result
+
+        if result == None:
+            errlog("IAMRole couldn't be found in the CloudFormation stack")
+            return None
+
+        return result 
     
     def setup_robomaker_settings(self):
         log("setup roboMakerSettings.json..")
@@ -474,6 +343,7 @@ def errlog(message):
     print("\033[91m{}\033[0m".format(message))
 
 if __name__ == '__main__':
+    CFStackName = sys.argv[1]
     setup = Setup()
     setup.entry()
 

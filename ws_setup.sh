@@ -24,4 +24,7 @@ sudo pip3 install -U awscli
 sudo pip3 install -U colcon-common-extensions colcon-ros-bundle
 sudo pip3 install boto3
 
-python3 ./ws_setup.py
+STACK_NAME=meirorunner
+
+aws cloudformation deploy --template-file ./meirorunner.template.json --stack-name $STACK_NAME --capabilities CAPABILITY_IAM
+python3 ./ws_setup.py $STACK_NAME

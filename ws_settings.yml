@@ -2,11 +2,8 @@
 # If you rather want to use the resources you've already had for running this
 # sample application, please set the value bellow.
 
-bucket_name:  # S3 bucket for running RoboMaker simulation. If you want to use specific S3 buckt, set that bucket name here. 
 simulation_app_name: # Simulation application name. If you want to use specific name to the application, set the application name here.
 robot_app_name: # Robot application name. If you want to use specific name to the application, set the application name here.
-iam_policy:   # IAM policy for running RoboMaker simulator. If you want to use specific IAM policy, set the IAM policy ARN here.
-iam_role:     # IAM role for running RoboMaker simultor. If you want to use specific IAM role, set the IAM role ARN here.
 vpc: # VPC used for running simulator. If you want to use specific VPC, seth the VPC here. 
 subnets: # subnets for running RoboMaker simulator. The subnets for the vpc are automatically defined. If you want to use specific subnets, set the subnets here. (with "- subnet" format).
 security_groups: # security group used in RoboMaker simulator. This will be security group for default VPC.  If you want to use specific security group, set the security groups here. ( with "- secutiry-group-name" format).

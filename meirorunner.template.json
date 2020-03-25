@@ -1,0 +1,113 @@
+{
+  "Resources": {
+    "MeiroRunnerBucket5CA06DCA": {
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
+    },
+    "MeiroRunnerSimulationRoleC9B04765": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "robomaker.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      }
+    },
+    "MeiroRunnerSimulationRoleDefaultPolicy344CC021": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:Get*",
+                "s3:List*",
+                "s3:Put*",
+                "s3:DeleteObject"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "MeiroRunnerBucket5CA06DCA",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "MeiroRunnerBucket5CA06DCA",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:DescribeLogStreams"
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:logs:*:852352399745:log-group:/aws/robomaker/SimulationJobs*"
+            },
+            {
+              "Action": "cloudwatch:PutMetricData",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "robomaker:TagResource",
+                "robomaker:UntagResource",
+                "robomaker:ListTagsForResource",
+                "robomaker:CancelSimulationJob"
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:robomaker:*:852352399745:simulation-job*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "MeiroRunnerSimulationRoleDefaultPolicy344CC021",
+        "Roles": [
+          {
+            "Ref": "MeiroRunnerSimulationRoleC9B04765"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "BucketName": {
+      "Value": {
+        "Ref": "MeiroRunnerBucket5CA06DCA"
+      }
+    },
+    "IAMRole": {
+      "Value": {
+        "Fn::GetAtt": [
+          "MeiroRunnerSimulationRoleC9B04765",
+          "Arn"
+        ]
+      }
+    }
+  }
+}
