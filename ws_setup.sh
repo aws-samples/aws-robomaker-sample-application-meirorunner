@@ -11,7 +11,7 @@ do
     if [ $count = 0 ]; then
         break
     else
-        echo "System update is running.. Wait until the complete"
+        echo "System update is running.. Wait until the completion"
         sleep 10
     fi
 done
