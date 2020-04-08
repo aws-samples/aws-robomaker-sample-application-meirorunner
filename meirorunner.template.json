@@ -66,7 +66,7 @@
                 "logs:DescribeLogStreams"
               ],
               "Effect": "Allow",
-              "Resource": "arn:aws:logs:*:852352399745:log-group:/aws/robomaker/SimulationJobs*"
+              "Resource": "*"
             },
             {
               "Action": "cloudwatch:PutMetricData",
