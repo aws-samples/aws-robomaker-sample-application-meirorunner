@@ -81,7 +81,7 @@
                 "robomaker:CancelSimulationJob"
               ],
               "Effect": "Allow",
-              "Resource": "arn:aws:robomaker:*:852352399745:simulation-job*"
+              "Resource": "arn:aws:robomaker:*:*:simulation-job*"
             }
           ],
           "Version": "2012-10-17"
