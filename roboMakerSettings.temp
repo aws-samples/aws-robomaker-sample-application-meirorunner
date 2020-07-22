@@ -89,7 +89,6 @@
           "maxJobDurationInSeconds": 1800,
           "failureBehavior": "Fail",
           "iamRole": "<iam_role>",
-          "outputLocation": "<bucket_name>",
           "vpcConfig": {
             "securityGroups": <security_groups>,
             "subnets": <subnets>,
@@ -152,7 +151,6 @@
           "maxJobDurationInSeconds": 5400,
           "failureBehavior": "Fail",
           "iamRole": "<iam_role>",
-          "outputLocation": "<bucket_name>",
           "vpcConfig": {
             "securityGroups": <security_groups>,
             "subnets": <subnets>,
