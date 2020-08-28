@@ -18,6 +18,7 @@ import markov
 from markov import utils
 import markov.environments
 import os
+import pathlib
 
 CUSTOM_FILES_PATH = "robomaker"
 PRESET_LOCAL_PATH = os.path.join(CUSTOM_FILES_PATH, "presets/")
@@ -28,6 +29,7 @@ if not os.path.exists(CUSTOM_FILES_PATH):
     os.makedirs(CUSTOM_FILES_PATH)
     os.makedirs(PRESET_LOCAL_PATH)
     os.makedirs(ENVIRONMENT_LOCAL_PATH)
+    pathlib.Path(CUSTOM_FILES_PATH + "/__init__.py").touch()
 
 def rollout_worker(graph_manager, checkpoint_dir, data_store, num_workers):
     """
@@ -78,13 +80,13 @@ def main():
                         default=os.environ.get("ROS_AWS_REGION", "us-west-2"))
 
     args = parser.parse_args()
-
+    
     data_store_params_instance = S3BotoDataStoreParameters(bucket_name=args.model_s3_bucket,
                                                    s3_folder=args.model_s3_prefix,
                                                    checkpoint_dir=args.local_model_directory,
                                                    aws_region=args.aws_region)
     data_store = S3BotoDataStore(data_store_params_instance)
-
+    
     # Get the IP of the trainer machine
     trainer_ip = data_store.get_ip()
     print("Received IP from SageMaker successfully: %s" % trainer_ip)
