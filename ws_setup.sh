@@ -24,7 +24,7 @@ sudo pip3 install -U awscli
 sudo pip3 install -U colcon-common-extensions colcon-ros-bundle
 sudo pip3 install boto3
 
-STACK_NAME=meirorunner`echo $C9_USER|tr -d [\.\\-=_]` 
+STACK_NAME=meirorunner`echo $C9_USER|tr -d [\.\\-=_@]` 
 
 export SETUPTOOLS_USE_DISTUTILS=stdlib
 aws cloudformation deploy --template-file ./meirorunner.template.json --stack-name $STACK_NAME --capabilities CAPABILITY_IAM
