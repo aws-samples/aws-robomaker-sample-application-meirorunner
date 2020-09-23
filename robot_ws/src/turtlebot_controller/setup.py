@@ -13,7 +13,7 @@ setup(
     python_requires=REQUIRES_PYTHON,
     install_requires=[
         'annoy==1.8.3',
-        'boto3==1.9.23',
+        'boto3==1.15.3',
         'futures==3.1.1',
         'gym==0.10.5',
         'matplotlib==2.0.2',
