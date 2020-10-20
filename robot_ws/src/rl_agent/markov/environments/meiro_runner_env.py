@@ -186,7 +186,7 @@ class TurtleBot3MeiroRunnerEnv(gym.Env):
         self.ack_publisher.publish(speed)
 
     def infer_reward_state(self,action):
-        #Wait till we have a image from the LIDAR
+        #Wait until we have an image from the LIDAR.
         while not self.ranges:
             time.sleep(SLEEP_WAITING_FOR_IMAGE_TIME_IN_SECOND)
 
@@ -200,7 +200,7 @@ class TurtleBot3MeiroRunnerEnv(gym.Env):
         state = np.clip(np.interp(x, xp, self.ranges), 0, LIDAR_SCAN_MAX_DISTANCE)
         state[np.isnan(state)] = LIDAR_SCAN_MAX_DISTANCE
 
-        #Find min distaance 
+        #Find min distance 
         min_distance = np.amin(state)
 
         reward = 0
@@ -235,19 +235,19 @@ class TurtleBot3MeiroRunnerEnv(gym.Env):
                     
                 done = False
             else:
-                # While the robot is away enough from the wall, give throttle value as score 
+                # While the robot is away enough from the wall, give throttle value as score. 
                 # (Max throttle 0.1 => 1.0 for score)
                 reward = throttle * 10.0 
                 done = False
 
-        # leave footstep marker to the place robot has passed through
+        # leave footstep marker to the place robot has passed through.
         footstep_marker = self.calc_footsteps_mark_position(self.x, self.y)
         if not self.last_footsteps_mark_position == footstep_marker:
-            # if the robot had been alread warlked through that area more than twice, treat it as crashing.
+            # if the robot had been already walked through that area more than twice, treat it as crashing.
             if self.footsteps_marker[footstep_marker[0]][footstep_marker[1]] > 1:
                 reward = CRASHED
                 done = True
-            # if the robot had been alread warlked through that area, reduce the reward
+            # if the robot had been already walked through that area, reduce the reward.
             elif self.footsteps_marker[footstep_marker[0]][footstep_marker[1]] > 0:
                 reward = reward * 0.01
                 
@@ -318,7 +318,7 @@ class TurtleBot3MeiroRunnerDiscreteEnv(TurtleBot3MeiroRunnerEnv):
         elif action == 4:  # steer to the right
             steering = -0.6
             throttle = 0.09
-        else:  # should not be here
+        else:  # should not be here.
             raise ValueError("Invalid action")
 
         continous_action = [steering, throttle]
