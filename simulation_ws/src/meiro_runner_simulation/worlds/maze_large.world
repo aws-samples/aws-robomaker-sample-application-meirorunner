@@ -36,51 +36,6 @@
         <falloff>1.2</falloff>
       </spot>
     </light>
-    <light name='user_point_light_2' type='point'>
-      <pose frame=''>0.0 1.0 2 0 0 0</pose>
-      <diffuse>0.3 0.3 0.3 1</diffuse>
-      <specular>0.1 0.1 0.1 1</specular>
-      <attenuation>
-        <range>20</range>
-        <constant>0.5</constant>
-        <linear>0.01</linear>
-        <quadratic>0.001</quadratic>
-      </attenuation>
-      <cast_shadows>0</cast_shadows>
-      <direction>0 0 -1</direction>
-      <spot>
-        <inner_angle>0.1</inner_angle>
-        <outer_angle>0.5</outer_angle>
-        <falloff>1.2</falloff>
-      </spot>
-    </light>
-    <light name='user_point_light_3' type='point'>
-      <pose frame=''>2.0 1.0 2 0 -0 0</pose>
-      <diffuse>0.3 0.3 0.3 1</diffuse>
-      <specular>0.1 0.1 0.1 1</specular>
-      <attenuation>
-        <range>20</range>
-        <constant>0.5</constant>
-        <linear>0.01</linear>
-        <quadratic>0.001</quadratic>
-      </attenuation>
-      <cast_shadows>0</cast_shadows>
-      <direction>0 0 -1</direction>
-    </light>
-    <light name='user_point_light_4' type='point'>
-      <pose frame=''>2.0 -3.0 2 0 -0 0</pose>
-      <diffuse>0.3 0.3 0.3 1</diffuse>
-      <specular>0.1 0.1 0.1 1</specular>
-      <attenuation>
-        <range>20</range>
-        <constant>0.5</constant>
-        <linear>0.01</linear>
-        <quadratic>0.001</quadratic>
-      </attenuation>
-      <cast_shadows>0</cast_shadows>
-      <direction>0 0 -1</direction>
-    </light>
-
     <include>
       <uri>model://models/playroom_large</uri>
       <pose>0 0 0 0 0 0</pose>
