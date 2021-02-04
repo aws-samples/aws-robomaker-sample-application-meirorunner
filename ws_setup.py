@@ -235,7 +235,7 @@ class Setup:
 
         try:
             file_name_template = "templates/app_launcher.sh.temp" 
-            file_name_output = "./app_launhcer.sh" 
+            file_name_output = "./app_launcher.sh" 
             with open(file_name_template) as f:
                 lines = f.read()
 
