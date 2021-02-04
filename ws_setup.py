@@ -38,7 +38,8 @@ SETTINGS = ["aws_region",
             "security_groups", 
             "subnets", 
             "iam_role", 
-            "robomaker_settings"]
+            "robomaker_settings",
+            "app_launcer_settings"]
 
 APPNAME_BASE="meiro_runner_"
 
@@ -211,7 +212,7 @@ class Setup:
         log("setup roboMakerSettings.json..")
 
         try:
-            file_name_template = "roboMakerSettings.temp" 
+            file_name_template = "templates/roboMakerSettings.temp" 
             file_name_output = "../roboMakerSettings.json" 
             with open(file_name_template) as f:
                 lines = f.read()
@@ -228,6 +229,29 @@ class Setup:
             return None
 
         return True
+
+    def setup_app_launcer_settings(self):
+        log("setup app_launcher.sh..")
+
+        try:
+            file_name_template = "templates/app_launcher.sh.temp" 
+            file_name_output = "./app_launhcer.sh" 
+            with open(file_name_template) as f:
+                lines = f.read()
+
+            for item in self.settings:
+                value = str(self.settings[item])
+                value = value.replace("'", "\"")
+                lines = lines.replace("<{}>".format(item), value)
+
+            with open(file_name_output, mode="w") as f:
+                f.write(lines)        
+        except Exception as e:
+            errlog("Exception : %s" % str(e))
+            return None
+
+        return True
+        
             
     def postProcess(self):
         try:
