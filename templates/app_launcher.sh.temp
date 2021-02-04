@@ -73,7 +73,7 @@ aws robomaker update-robot-application \
 # Launch
 template='
     {   "iamRole":"%s", 
-        "maxJobDurationInSeconds":3600, 
+        "maxJobDurationInSeconds":5400, 
         "failureBehavior":"Fail", 
         "simulationApplications":[{"application":"%s","applicationVersion":"$LATEST",
             "launchConfig":{
