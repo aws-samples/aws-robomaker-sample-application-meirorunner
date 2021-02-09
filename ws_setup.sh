@@ -20,12 +20,12 @@ sudo apt-get update
 source /opt/ros/$ROS_DISTRO/setup.sh
 rosdep update
 
-sudo pip3 install -U awscli
-sudo pip3 install -U colcon-common-extensions colcon-ros-bundle
-sudo pip3 install boto3
+pip3 install -U awscli
+pip3 install -U colcon-common-extensions colcon-ros-bundle colcon-bundle
+pip3 install boto3
 
 STACK_NAME=meirorunner`echo $C9_USER|tr -d [\.\\-=_@]` 
 
 export SETUPTOOLS_USE_DISTUTILS=stdlib
-aws cloudformation deploy --template-file ./meirorunner.template.json --stack-name $STACK_NAME --capabilities CAPABILITY_IAM
+aws cloudformation deploy --template-file ./cf/meirorunner.template.json --stack-name $STACK_NAME --capabilities CAPABILITY_IAM
 python3 ./ws_setup.py $STACK_NAME
