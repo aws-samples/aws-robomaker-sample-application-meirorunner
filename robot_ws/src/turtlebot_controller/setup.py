@@ -21,7 +21,7 @@ setup(
         'numpy==1.16.0',
         'pandas==0.22.0',
         'Pillow>=6.2.2',
-        'PyYAML==4.2b1',
+        'PyYAML==5.4',
         'scipy==0.19.0',
         'scikit-image==0.13.0',
         'tensorflow==1.15.4',
