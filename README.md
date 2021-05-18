@@ -24,14 +24,45 @@ cd MeiroRunner
 The setup script will create AWS resources to run the application and the created resources are noted in ws_settings.yaml file.
 The setup script will then build the application, the whole process will take around 20 minitue to complete.
 
-## How to use on AWS RoboMaker
-To train machine larning model with reinforcement learning using robomaker simulator,  select *Run* -> *Launch Simulation* -> *MeiroRunner Training* from the menu of RoboMaker development environment.
+## How to run application on AWS RoboMaker Simulation
 
-To evaluate the machine learning model, select *Run* -> *Launch Simulation* -> *MeiroRunner Evaluate*.
+- To train machine learning model with reinforcement learning using robomaker simulation, execute following command in the terminal window:
 
-To modify and rebuild the application, modify the code on AWS RoboMaker development environment and slect *Run* -> *Workflow* -> *Meiro Runner build -> bundle all*. This will update the buid files for the application.
+    ```bash
+    cd ~/environment/MeiroRunner
+    ./app_launcher.sh
+    ```
 
-To run the macnine learning model in the real-life using a physical robot (i.e. Turtlebot3 Burger), you can use a launch file bringup_robot.launch in meiro_runner_robot package.
+   (The script file app_launcher.sh is created when you executed ./ws_setup.sh)
+
+- To evaluate the machine learning model using robomaker simulation, execute following command in the terminal window:
+
+    ```bash
+    cd ~/environment/MeiroRunner
+    ./app_launcher_evaluate.sh
+    ```
+
+  (The script file app_launcher.sh is created when you executed ./ws_setup.sh)
+
+## How to modify application
+
+To modify and rebuild the application, modify the code on AWS RoboMaker development environment and execute following:
+
+- If you change the file under simulation_ws
+    ```bash
+    cd ~/environment/MeiroRunner/simulation_ws
+    colcon build
+    colcon bundle
+    ```
+
+- If you change the file under robot_ws
+    ```bash
+    cd ~/environment/MeiroRunner/robot_ws
+    colcon build
+    colcon bundle
+    ```
+
+To run the machine learning model in the real-life using a physical robot (i.e. Turtlebot3 Burger), you can use a launch file bringup_robot.launch in meiro_runner_robot package.
 The robot application is under robot_ws direcotry, to build and deploy the application to physical robots, please refer to [RoboMaker documentation](https://docs.aws.amazon.com/robomaker/latest/dg/gs-deploy.html).
 Following is the configuration for robot application running in Turtlebot3 Burger.
 

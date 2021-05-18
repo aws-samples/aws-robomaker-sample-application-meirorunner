@@ -39,7 +39,8 @@ SETTINGS = ["aws_region",
             "subnets", 
             "iam_role", 
             "robomaker_settings",
-            "app_launcer_settings"]
+            "app_launcer_settings",
+            "app_launcer_evaluate_settings"]
 
 APPNAME_BASE="meiro_runner_"
 
@@ -245,14 +246,39 @@ class Setup:
                 lines = lines.replace("<{}>".format(item), value)
 
             with open(file_name_output, mode="w") as f:
-                f.write(lines)        
+                f.write(lines)
+            os.chmod(file_name_output, 0o777)
+            
+        except Exception as e:
+            errlog("Exception : %s" % str(e))
+            return None
+
+        return True
+
+    def setup_app_launcer_evaluate_settings(self):
+        log("setup app_launcher.sh..")
+
+        try:
+            file_name_template = "templates/app_launcher_evaluate.sh.temp" 
+            file_name_output = "./app_launcher_evaluate.sh" 
+            with open(file_name_template) as f:
+                lines = f.read()
+
+            for item in self.settings:
+                value = str(self.settings[item])
+                value = value.replace("'", "\"")
+                lines = lines.replace("<{}>".format(item), value)
+
+            with open(file_name_output, mode="w") as f:
+                f.write(lines)
+            os.chmod(file_name_output, 0o777)
+            
         except Exception as e:
             errlog("Exception : %s" % str(e))
             return None
 
         return True
         
-            
     def postProcess(self):
         try:
             log("Perform the build and bundles...")
